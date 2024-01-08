@@ -17,6 +17,7 @@ pub enum Command {
     Evaluate,
     Sugest,
     Play,
+    Autoplay,
     Fen(String),
     Depth(usize),
     Move(String),
@@ -73,6 +74,7 @@ impl App {
             Command::Evaluate => self.show_evaluation(),
             Command::Sugest => self.sugest_movement(),
             Command::Play => self.computer_move(),
+            Command::Autoplay => self.auto_play(),
             Command::Fen(fen) => self.load_board(&fen),
             Command::Move(coords) => self.try_movement(&coords),
             Command::Analyze(coords) => self.analyze_movement(&coords),
@@ -244,6 +246,19 @@ impl App {
         }
     }
 
+    fn auto_play(&mut self) {
+        loop {
+            println!("------------------------------------------------");
+            self.computer_move();
+            let white_king = self.board.king_exists(Color::White);
+            let black_king = self.board.king_exists(Color::Black);
+            let is_threefold = self.board.is_threefold();
+            if !white_king || !black_king || is_threefold{
+                break;
+            }
+        };
+    }
+
     fn load_board(&mut self, fen: &str) {
         self.board = Board::from_fen(fen);
         println!("{:?}", self.board);
@@ -282,6 +297,7 @@ impl Command {
             "evaluate" => Command::Evaluate,
             "sugest" => Command::Sugest,
             "play" => Command::Play,
+            "autoplay" => Command::Autoplay,
             "fen" => Command::Fen(val.to_string()),
             "move" => Command::Move(val.to_string()),
             "analyze" => Command::Analyze(val.to_string()),

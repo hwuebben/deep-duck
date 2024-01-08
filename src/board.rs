@@ -94,11 +94,11 @@ impl Board {
 
     pub fn make_movement(&mut self, movement: Movement) {
 
-        if movement.moved == PieceKind::Pawn || movement.captured.is_some() { // TODO add castling to condition
-            self.history = Default::default();
-        }else {
-            self.history.push(self.data);
-        }
+        // if movement.moved == PieceKind::Pawn || movement.captured.is_some() { // TODO add castling to condition
+            // self.history = Default::default();
+        // }else {
+            // self.history.push(self.data);
+        // }
 
         self.drag_piece(movement.origin, movement.target);
         self.place_duck(Some(movement.duck_target));
@@ -155,7 +155,6 @@ impl Board {
         }
 
         let mut count = 0;
-
         for data_history in &self.history{
             if are_pieces_equal(data_history, &self.data){
                 count += 1;
